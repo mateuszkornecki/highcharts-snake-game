@@ -6,8 +6,7 @@ class Snake{
         this.initialY = initialY;
         this.posX = 0;
         this.posY = 0;
-        this.height = 10;
-        this.width = 10;
+        this.size = this.height = this.width = 10;
         this.chart = chart;
       }
 
@@ -19,24 +18,35 @@ class Snake{
       }
 
       moveRight(direction) {
-        this.posX += 10;
-        this.chart.snake.translate(this.posX,this.posY);
+        const isInsidePlotArea = this.posX + this.size <= this.chart.plotWidth;
+        if(isInsidePlotArea) {
+          this.posX += this.size;
+          this.chart.snake.translate(this.posX,this.posY);
+        }
       }
 
       moveLeft(direction) {
-        this.posX -= 10;
+        const isInsidePlotArea = this.posX - this.size >= 0;
+        if(isInsidePlotArea) {
+          this.posX -= this.size;
         this.chart.snake.translate(this.posX,this.posY);
+        }
       }
 
       moveUp(direction) {
-        this.posY -= 10;
+        const isInsidePlotArea = this.posY - this.width >= 0
+        if(isInsidePlotArea){
+          this.posY -= this.size;
         this.chart.snake.translate(this.posX,this.posY);
+        }
       }
 
       moveDown(direction) {
+        if(this.posY + this.size <= this.chart.plotHeight) {
         this.posY += 10;
         this.chart.snake.translate(this.posX,this.posY);
       }
+    }
       
 };
 
@@ -48,7 +58,6 @@ Highcharts.chart('container', {
                 const chart = this,
                     x = chart.plotLeft,
                     y = chart.plotTop;
-                    console.log(x,y);
                 const snake = new Snake(x,y, chart);
                 snake.render();
                 document.addEventListener('keydown', event => {
