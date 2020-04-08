@@ -8,6 +8,7 @@ class Snake{
         this.posY = 0;
         this.size = this.height = this.width = 10;
         this.chart = chart;
+        this.interval = null;
       }
 
       render() {
@@ -17,7 +18,35 @@ class Snake{
             .toFront();
       }
 
-      moveRight(direction) {
+      startGame() {
+        this.render();
+        this.autoPilot('DOWN');
+      }
+
+      autoPilot(direction){
+        this.interval = setInterval(() => {
+          if(direction === 'UP') {
+            this.moveUp();
+          } else if (direction === 'DOWN') {
+            this.moveDown();
+          } else if (direction === 'RIGHT') {
+            this.moveRight();
+          } else if (direction === 'LEFT') {
+            this.moveLeft();
+          }
+      }, 500);
+      }
+
+      autoPilotStop() {
+        clearInterval(this.interval);
+      }
+
+      turn(direction) {
+        this.autoPilotStop();
+        this.autoPilot(direction);
+      }
+
+      moveRight() {
         const isInsidePlotArea = this.posX + this.size <= this.chart.plotWidth;
         if(isInsidePlotArea) {
           this.posX += this.size;
@@ -25,7 +54,7 @@ class Snake{
         }
       }
 
-      moveLeft(direction) {
+      moveLeft() {
         const isInsidePlotArea = this.posX - this.size >= 0;
         if(isInsidePlotArea) {
           this.posX -= this.size;
@@ -33,7 +62,7 @@ class Snake{
         }
       }
 
-      moveUp(direction) {
+      moveUp() {
         const isInsidePlotArea = this.posY - this.width >= 0
         if(isInsidePlotArea){
           this.posY -= this.size;
@@ -41,12 +70,14 @@ class Snake{
         }
       }
 
-      moveDown(direction) {
-        if(this.posY + this.size <= this.chart.plotHeight) {
+      moveDown() {
+        const isInsidePlotArea = this.posY + this.size <= this.chart.plotHeight
+        if(isInsidePlotArea) {
         this.posY += 10;
         this.chart.snake.translate(this.posX,this.posY);
       }
     }
+
       
 };
 
@@ -58,21 +89,21 @@ Highcharts.chart('container', {
                 const chart = this,
                     x = chart.plotLeft,
                     y = chart.plotTop;
-                const snake = new Snake(x,y, chart);
-                snake.render();
+                const snake = new Snake(x, y ,chart);
+                snake.startGame();
                 document.addEventListener('keydown', event => {
                     switch(event.key) {
                         case 'ArrowRight': 
-                        snake.moveRight();
+                        snake.turn('RIGHT');
                         break;
                         case 'ArrowLeft': 
-                        snake.moveLeft();
+                        snake.turn('LEFT');
                         break;
                         case 'ArrowUp': 
-                        snake.moveUp();
+                        snake.turn('UP');
                         break;
                         case 'ArrowDown': 
-                        snake.moveDown();
+                        snake.turn('DOWN');
                         break;
 
                     }
