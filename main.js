@@ -25,6 +25,8 @@ class Snake {
 
     autoPilot(direction) {
         this.interval = setInterval(() => {
+            // TODO: Need to find a better place for eat() init.
+            this.eat();
             if (direction === 'UP') {
                 this.moveUp();
             } else if (direction === 'DOWN') {
@@ -82,27 +84,43 @@ class Snake {
         return { x: this.initialX + this.translateX, y: this.initialY + this.translateY }
     }
 
+    getDistanceBetween (pointA, pointB) {
+        return Math.hypot(Math.abs(pointA.x - pointB.x), Math.abs(pointA.y - pointB.y));
+    }
+
     getClosestPoint() {
         const points = this.chart.series[0].points,
-            actualPosition = this.getActualPosition(),
-            getDistanceBetween = (pointA, pointB) => {
-                return Math.hypot(Math.abs(pointA.x - pointB.x), Math.abs(pointA.y, pointB.y));
-            }
-      
-
+            actualPosition = this.getActualPosition();
         let closestPoint = null;
         points.reduce((previousDistance, point) => {
             const pointPosition = { x: point.plotX + this.chart.plotLeft, y: point.plotY + this.chart.plotTop },
-                distanceBetween = getDistanceBetween(actualPosition, pointPosition);
+                distanceBetween = this.getDistanceBetween(actualPosition, pointPosition);
             if (distanceBetween < previousDistance) {
                 closestPoint = point;
             };
-            return getDistanceBetween(actualPosition, pointPosition)
+            return this.getDistanceBetween(actualPosition, pointPosition)
         }, 1000000);
 
         return closestPoint;
     }
 
+    detectCollision() {
+        const closestPoint = this.getClosestPoint(),
+            closestPointPos = {x: closestPoint.plotX + this.chart.plotLeft, y:closestPoint.plotY + this.chart.plotTop},
+            actualPosition = this.getActualPosition(),
+            distanceBetween = this.getDistanceBetween(closestPointPos, actualPosition);
+
+        return distanceBetween < (this.size * 1.5)
+    }
+
+    eat() {
+        const isCollision = this.detectCollision(),
+            closestPoint = this.getClosestPoint();
+
+        if(isCollision) {
+            closestPoint.destroy();
+        }
+    }
 };
 
 Highcharts.chart('container', {
@@ -115,6 +133,8 @@ Highcharts.chart('container', {
                     y = chart.plotTop;
                 const snake = new Snake(x, y, chart);
                 snake.startGame();
+                const test = snake.getDistanceBetween({x:0, y:0}, {x:3, y:0});
+                console.log(test);
                 document.addEventListener('keydown', event => {
                     switch (event.key) {
                         case 'ArrowRight':
