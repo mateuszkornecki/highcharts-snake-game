@@ -40,15 +40,6 @@ class Snake {
         this.interval = setInterval(() => {
             // TODO: Need to find a better place for eat() init.
             this.eat();
-            // if (this.direction === 'UP') {
-            //     this.moveUp();
-            // } else if (this.direction === 'DOWN') {
-            //     this.moveDown();
-            // } else if (this.direction === 'RIGHT') {
-            //     this.moveRight();
-            // } else if (this.direction === 'LEFT') {
-            //     this.moveLeft();
-            // }
             this.move(this.direction)
         }, this.refreshRate);
     }
