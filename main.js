@@ -11,6 +11,8 @@ class Snake {
         this.interval = null;
         this.svgGroup = null;
         this.segments = [];
+        this.direction = 'DOWN';
+        this.refreshRate = 100
     }
 
     renderHead() {
@@ -30,29 +32,32 @@ class Snake {
         this.autoPilot('DOWN');
     }
 
-    autoPilot(direction) {
+    changeDirection(){
+        this.direction = 'RIGHT'
+    }
+
+    autoPilot() {
         this.interval = setInterval(() => {
             // TODO: Need to find a better place for eat() init.
             this.eat();
-            if (direction === 'UP') {
+            if (this.direction === 'UP') {
                 this.moveUp();
-            } else if (direction === 'DOWN') {
+            } else if (this.direction === 'DOWN') {
                 this.moveDown();
-            } else if (direction === 'RIGHT') {
+            } else if (this.direction === 'RIGHT') {
                 this.moveRight();
-            } else if (direction === 'LEFT') {
+            } else if (this.direction === 'LEFT') {
                 this.moveLeft();
             }
-        }, 500);
+        }, this.refreshRate);
     }
 
     autoPilotStop() {
         clearInterval(this.interval);
     }
 
-    turn(direction) {
-        this.autoPilotStop();
-        this.autoPilot(direction);
+    setDirection(direction) {
+        this.direction = direction;
     }
 
     translateSegments() {
@@ -167,16 +172,16 @@ Highcharts.chart('container', {
                 document.addEventListener('keydown', event => {
                     switch (event.key) {
                         case 'ArrowRight':
-                            snake.turn('RIGHT');
+                            snake.setDirection('RIGHT');
                             break;
                         case 'ArrowLeft':
-                            snake.turn('LEFT');
+                            snake.setDirection('LEFT');
                             break;
                         case 'ArrowUp':
-                            snake.turn('UP');
+                            snake.setDirection('UP');
                             break;
                         case 'ArrowDown':
-                            snake.turn('DOWN');
+                            snake.setDirection('DOWN');
                             break;
                         case ' ':
                             // for debugging purpose only.
