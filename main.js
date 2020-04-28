@@ -1,25 +1,32 @@
 import Highcharts from 'https://code.highcharts.com/es-modules/masters/highcharts.src.js';
 
 class Snake {
-    constructor(initialX, initialY, chart) {
-        this.initialX = initialX;
-        this.initialY = initialY;
+    constructor(chart) {
+        this.initialX = chart.plotLeft;
+        this.initialY = chart.plotTop;
         this.translateX = 0;
         this.translateY = 0;
-        this.size = this.height = this.width = 10;
+        this.size = this.height = this.width = 20;
         this.chart = chart;
         this.interval = null;
+        this.svgGroup = null;
+        this.segments = [];
     }
 
-    render() {
-        this.chart.snake = this.chart.renderer.rect(this.initialX, this.initialY, this.height, this.width)
-            .attr({ fill: 'red' })
+    renderHead() {
+        this.chart.snake = this.svgGroup = this.chart.renderer.g()
             .add()
             .toFront();
+
+        this.chart.snakeHead = this.chart.renderer.rect(this.initialX, this.initialY, this.height, this.width)
+            .attr({ fill: 'tomato','stroke-width': 1, stroke: 'white'})
+            .add(this.svgGroup);
+        
+        this.segments.push(this.chart.snakeHead);
     }
 
     startGame() {
-        this.render();
+        this.renderHead();
         this.autoPilot('DOWN');
     }
 
@@ -48,11 +55,25 @@ class Snake {
         this.autoPilot(direction);
     }
 
+    translateSegments() {
+        this.segments.forEach((segment, index) => {
+            if(index === this.segments.length - 1){
+                segment.translate(this.translateX, this.translateY);
+            } else {
+                const previousTranslate = {x: this.segments[index + 1].translateX,  y: this.segments[index +  1].translateY}
+                const translate = {x: previousTranslate.x - segment.translateX, y: previousTranslate.y - segment.translateY }
+                console.log(segment.translateX, segment.translateY , previousTranslate);
+                segment.translate(previousTranslate.x, previousTranslate.y );
+            }
+        })
+    }
+
     moveRight() {
         const isInsidePlotArea = this.translateX + this.size <= this.chart.plotWidth;
         if (isInsidePlotArea) {
             this.translateX += this.size;
-            this.chart.snake.translate(this.translateX, this.translateY);
+            this.translateSegments();
+
         }
     }
 
@@ -60,27 +81,27 @@ class Snake {
         const isInsidePlotArea = this.translateX - this.size >= 0;
         if (isInsidePlotArea) {
             this.translateX -= this.size;
-            this.chart.snake.translate(this.translateX, this.translateY);
+            this.translateSegments();
         }
     }
 
     moveUp() {
-        const isInsidePlotArea = this.translateY - this.width >= 0
+        const isInsidePlotArea = this.translateY - this.size >= 0;
         if (isInsidePlotArea) {
             this.translateY -= this.size;
-            this.chart.snake.translate(this.translateX, this.translateY);
+            this.translateSegments();
         }
     }
 
     moveDown() {
         const isInsidePlotArea = this.translateY + this.size <= this.chart.plotHeight
         if (isInsidePlotArea) {
-            this.translateY += 10;
-            this.chart.snake.translate(this.translateX, this.translateY);
+            this.translateY += this.size;
+            this.translateSegments();
         }
     }
 
-    getActualPosition() {
+    getActualHeadPosition() {
         return { x: this.initialX + this.translateX, y: this.initialY + this.translateY }
     }
 
@@ -90,7 +111,7 @@ class Snake {
 
     getClosestPoint() {
         const points = this.chart.series[0].points,
-            actualPosition = this.getActualPosition();
+            actualPosition = this.getActualHeadPosition();
         let closestPoint = null;
         points.reduce((previousDistance, point) => {
             const pointPosition = { x: point.plotX + this.chart.plotLeft, y: point.plotY + this.chart.plotTop },
@@ -107,10 +128,10 @@ class Snake {
     detectCollision() {
         const closestPoint = this.getClosestPoint(),
             closestPointPos = {x: closestPoint.plotX + this.chart.plotLeft, y:closestPoint.plotY + this.chart.plotTop},
-            actualPosition = this.getActualPosition(),
+            actualPosition = this.getActualHeadPosition(),
             distanceBetween = this.getDistanceBetween(closestPointPos, actualPosition);
 
-        return distanceBetween < (this.size * 1.5)
+        return distanceBetween < (this.size)
     }
 
     eat() {
@@ -119,7 +140,17 @@ class Snake {
 
         if(isCollision) {
             closestPoint.destroy();
+            this.addBodySegment();
         }
+    }
+
+    addBodySegment() {
+        const bodySegment = this.chart.renderer.rect(this.initialX, this.initialY, this.size, this.size)
+        .attr({ fill: 'lightblue','stroke-width': 1, stroke: 'white'})
+        .add(this.svgGroup)
+        .translate(this.translateX,this.translateY);
+    
+        this.segments.unshift(bodySegment);
     }
 };
 
@@ -131,10 +162,8 @@ Highcharts.chart('container', {
                 const chart = this,
                     x = chart.plotLeft,
                     y = chart.plotTop;
-                const snake = new Snake(x, y, chart);
+                const snake = new Snake(chart);
                 snake.startGame();
-                const test = snake.getDistanceBetween({x:0, y:0}, {x:3, y:0});
-                console.log(test);
                 document.addEventListener('keydown', event => {
                     switch (event.key) {
                         case 'ArrowRight':
@@ -149,7 +178,10 @@ Highcharts.chart('container', {
                         case 'ArrowDown':
                             snake.turn('DOWN');
                             break;
-
+                        case ' ':
+                            // for debugging purpose only.
+                            snake.autoPilotStop();
+                            break;
                     }
                 })
 
