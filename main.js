@@ -40,15 +40,16 @@ class Snake {
         this.interval = setInterval(() => {
             // TODO: Need to find a better place for eat() init.
             this.eat();
-            if (this.direction === 'UP') {
-                this.moveUp();
-            } else if (this.direction === 'DOWN') {
-                this.moveDown();
-            } else if (this.direction === 'RIGHT') {
-                this.moveRight();
-            } else if (this.direction === 'LEFT') {
-                this.moveLeft();
-            }
+            // if (this.direction === 'UP') {
+            //     this.moveUp();
+            // } else if (this.direction === 'DOWN') {
+            //     this.moveDown();
+            // } else if (this.direction === 'RIGHT') {
+            //     this.moveRight();
+            // } else if (this.direction === 'LEFT') {
+            //     this.moveLeft();
+            // }
+            this.move(this.direction)
         }, this.refreshRate);
     }
 
@@ -65,44 +66,40 @@ class Snake {
             if(index === this.segments.length - 1){
                 segment.translate(this.translateX, this.translateY);
             } else {
-                const previousTranslate = {x: this.segments[index + 1].translateX,  y: this.segments[index +  1].translateY}
-                const translate = {x: previousTranslate.x - segment.translateX, y: previousTranslate.y - segment.translateY }
-                console.log(segment.translateX, segment.translateY , previousTranslate);
+                const previousTranslate = {x: this.segments[index + 1].translateX,  y: this.segments[index +  1].translateY},
+                    translate = {x: previousTranslate.x - segment.translateX, y: previousTranslate.y - segment.translateY }
                 segment.translate(previousTranslate.x, previousTranslate.y );
             }
         })
     }
 
-    moveRight() {
-        const isInsidePlotArea = this.translateX + this.size <= this.chart.plotWidth;
-        if (isInsidePlotArea) {
+    move(direction) {
+        if(direction === 'UP' && this.isInsideAfterTranslation('UP')){
+            this.translateY -= this.size;
+            this.translateSegments();
+        } else if (direction === 'DOWN' && this.isInsideAfterTranslation('DOWN')) {
+            this.translateY += this.size;
+            this.translateSegments();
+        } else if (direction === 'RIGHT' && this.isInsideAfterTranslation('RIGHT')) {
             this.translateX += this.size;
             this.translateSegments();
-
-        }
-    }
-
-    moveLeft() {
-        const isInsidePlotArea = this.translateX - this.size >= 0;
-        if (isInsidePlotArea) {
+        } else if (direction === 'LEFT' && this.isInsideAfterTranslation('LEFT')) {
             this.translateX -= this.size;
             this.translateSegments();
         }
     }
 
-    moveUp() {
-        const isInsidePlotArea = this.translateY - this.size >= 0;
-        if (isInsidePlotArea) {
-            this.translateY -= this.size;
-            this.translateSegments();
-        }
-    }
-
-    moveDown() {
-        const isInsidePlotArea = this.translateY + this.size <= this.chart.plotHeight
-        if (isInsidePlotArea) {
-            this.translateY += this.size;
-            this.translateSegments();
+    isInsideAfterTranslation(direction) {
+        switch(direction) {
+            case 'UP':
+                return this.translateY - this.size >= 0;
+            case 'DOWN':
+                return this.translateY + this.size <= this.chart.plotHeight;
+            case 'RIGHT':
+                console.log(this.chart.plotLeft);
+                return this.translateX + this.size <= this.chart.plotWidth;
+            case 'LEFT':
+                return this.translateX - this.size >= 0;
         }
     }
 
@@ -151,9 +148,9 @@ class Snake {
 
     addBodySegment() {
         const bodySegment = this.chart.renderer.rect(this.initialX, this.initialY, this.size, this.size)
-        .attr({ fill: 'lightblue','stroke-width': 1, stroke: 'white'})
-        .add(this.svgGroup)
-        .translate(this.translateX,this.translateY);
+            .attr({ fill: 'lightblue','stroke-width': 1, stroke: 'white'})
+            .add(this.svgGroup)
+            .translate(this.translateX,this.translateY);
     
         this.segments.unshift(bodySegment);
     }
