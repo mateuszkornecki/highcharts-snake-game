@@ -32,10 +32,6 @@ class Snake {
         this.autoPilot('DOWN');
     }
 
-    changeDirection(){
-        this.direction = 'RIGHT'
-    }
-
     autoPilot() {
         this.interval = setInterval(() => {
             // TODO: Need to find a better place for eat() init.
