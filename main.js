@@ -31,9 +31,6 @@ class Snake {
                 case 'ArrowDown':
                     this.setDirection('DOWN');
                     break;
-                case ' ':
-                    this.stopInterval();
-                    break;
             }
         })
     }
@@ -164,11 +161,13 @@ class Snake {
 
     genereteNewPoints() {
         if (this.chart.series[0].data.length === 0) {
-            this.chart.series[0].setData(generateRandomData(5));
+            this.chart.series[0].setData(getRandomData(5), false);
+            this.chart.series[0].update({color: getRandomColor()});
         }
     }
 
-    onGameOver() {
+    gameOver() {
+        this.stopInterval();
         this.chart.update({
             title: {
                 useHTML: true,
@@ -188,16 +187,13 @@ class Snake {
     }
 
     onWallCollision() {
-        const isCollision = this.detectWallCollision();
-        if (isCollision) {
-            this.stopInterval();
-            this.onGameOver();
+        if (this.detectWallCollision()) {
+            this.gameOver();
         }
     }
 
     onPointCollision() {
-        const isCollision = this.detectPointCollision();
-        if (isCollision) {
+        if (this.detectPointCollision()) {
             this.eat();
             this.addBodySegment();
             this.setScore(1);
@@ -230,12 +226,20 @@ class Snake {
     }
 };
 
-function generateRandomData(amount) {
+function getRandomData(amount) {
     const randomData = [];
     for (let i = 0; i < amount; i++) {
-        randomData.push(Math.floor(Math.random() * 10))
+        randomData.push(getRandomNumber(10));
     }
     return randomData;
+}
+
+function getRandomNumber(max) {
+    return Math.round(Math.random() * max)
+}
+
+function getRandomColor() {
+    return `rgb(${getRandomNumber(255)}, ${getRandomNumber(255)}, ${getRandomNumber(255)})`;
 }
 
 Highcharts.chart('container', {
@@ -255,7 +259,8 @@ Highcharts.chart('container', {
         enabled: false
     },
     series: [{
-        data: generateRandomData(5)
+        name: `Eat'em all!`,
+        data: getRandomData(5)
     }]
 
 });
