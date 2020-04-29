@@ -51,6 +51,7 @@ class Snake {
         this.addKeyDownListener()
         this.renderHead();
         this.startInterval('DOWN');
+        this.genereteNewPoints();
     }
 
     resetGame() {
@@ -260,7 +261,6 @@ Highcharts.chart('container', {
     },
     series: [{
         name: `Eat'em all!`,
-        data: getRandomData(5)
     }]
 
 });
