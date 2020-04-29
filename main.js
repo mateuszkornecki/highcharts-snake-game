@@ -243,7 +243,7 @@ Highcharts.chart('container', {
         type: 'scatter',
         events: {
             load() {
-                snake = new Snake(this);
+                const snake = new Snake(this);
                 snake.startGame();
             },
         }
