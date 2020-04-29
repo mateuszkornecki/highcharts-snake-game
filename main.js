@@ -12,7 +12,30 @@ class Snake {
         this.svgGroup = null;
         this.segments = [];
         this.direction = 'DOWN';
-        this.refreshRate = 100
+        this.refreshRate = 100;
+        this.score = 0;
+    }
+
+    addKeyDownListener() {
+        document.addEventListener('keydown', event => {
+            switch (event.key) {
+                case 'ArrowRight':
+                    this.setDirection('RIGHT');
+                    break;
+                case 'ArrowLeft':
+                    this.setDirection('LEFT');
+                    break;
+                case 'ArrowUp':
+                    this.setDirection('UP');
+                    break;
+                case 'ArrowDown':
+                    this.setDirection('DOWN');
+                    break;
+                case ' ':
+                    this.stopInterval();
+                    break;
+            }
+        })
     }
 
     renderHead() {
@@ -21,26 +44,37 @@ class Snake {
             .toFront();
 
         this.chart.snakeHead = this.chart.renderer.rect(this.initialX, this.initialY, this.height, this.width)
-            .attr({ fill: 'tomato','stroke-width': 1, stroke: 'white'})
+            .attr({ fill: 'tomato', 'stroke-width': 1, stroke: 'white' })
             .add(this.svgGroup);
-        
+
         this.segments.push(this.chart.snakeHead);
     }
 
     startGame() {
+        this.addKeyDownListener()
         this.renderHead();
-        this.autoPilot('DOWN');
+        this.startInterval('DOWN');
     }
 
-    autoPilot() {
+    resetGame() {
+        this.setScore(0);
+        this.svgGroup.destroy();
+        this.translateX = 0;
+        this.translateY = 0;
+        this.direction = 'DOWN';
+        this.segments.splice(0, this.segments.length);
+        this.playAgainButton.destroy();
+    }
+
+    startInterval() {
         this.interval = setInterval(() => {
-            // TODO: Need to find a better place for eat() init.
-            this.eat();
-            this.move(this.direction)
+            this.onWallCollision();
+            this.onPointCollision();
+            this.move(this.direction);
         }, this.refreshRate);
     }
 
-    autoPilotStop() {
+    stopInterval() {
         clearInterval(this.interval);
     }
 
@@ -50,18 +84,18 @@ class Snake {
 
     translateSegments() {
         this.segments.forEach((segment, index) => {
-            if(index === this.segments.length - 1){
+            if (index === this.segments.length - 1) {
                 segment.translate(this.translateX, this.translateY);
             } else {
-                const previousTranslate = {x: this.segments[index + 1].translateX,  y: this.segments[index +  1].translateY},
-                    translate = {x: previousTranslate.x - segment.translateX, y: previousTranslate.y - segment.translateY }
-                segment.translate(previousTranslate.x, previousTranslate.y );
+                const previousTranslate = { x: this.segments[index + 1].translateX, y: this.segments[index + 1].translateY },
+                    translate = { x: previousTranslate.x - segment.translateX, y: previousTranslate.y - segment.translateY }
+                segment.translate(previousTranslate.x, previousTranslate.y);
             }
         })
     }
 
     move(direction) {
-        if(direction === 'UP' && this.isInsideAfterTranslation('UP')){
+        if (direction === 'UP' && this.isInsideAfterTranslation('UP')) {
             this.translateY -= this.size;
             this.translateSegments();
         } else if (direction === 'DOWN' && this.isInsideAfterTranslation('DOWN')) {
@@ -77,13 +111,12 @@ class Snake {
     }
 
     isInsideAfterTranslation(direction) {
-        switch(direction) {
+        switch (direction) {
             case 'UP':
                 return this.translateY - this.size >= 0;
             case 'DOWN':
                 return this.translateY + this.size <= this.chart.plotHeight;
             case 'RIGHT':
-                console.log(this.chart.plotLeft);
                 return this.translateX + this.size <= this.chart.plotWidth;
             case 'LEFT':
                 return this.translateX - this.size >= 0;
@@ -94,7 +127,7 @@ class Snake {
         return { x: this.initialX + this.translateX, y: this.initialY + this.translateY }
     }
 
-    getDistanceBetween (pointA, pointB) {
+    getDistanceBetween(pointA, pointB) {
         return Math.hypot(Math.abs(pointA.x - pointB.x), Math.abs(pointA.y - pointB.y));
     }
 
@@ -114,72 +147,115 @@ class Snake {
         return closestPoint;
     }
 
-    detectCollision() {
+    detectPointCollision() {
         const closestPoint = this.getClosestPoint(),
-            closestPointPos = {x: closestPoint.plotX + this.chart.plotLeft, y:closestPoint.plotY + this.chart.plotTop},
+            closestPointPos = { x: closestPoint.plotX + this.chart.plotLeft, y: closestPoint.plotY + this.chart.plotTop },
             actualPosition = this.getActualHeadPosition(),
             distanceBetween = this.getDistanceBetween(closestPointPos, actualPosition);
 
         return distanceBetween < (this.size)
     }
 
-    eat() {
-        const isCollision = this.detectCollision(),
-            closestPoint = this.getClosestPoint();
-
-        if(isCollision) {
-            closestPoint.destroy();
-            this.addBodySegment();
+    detectWallCollision() {
+        if (!this.isInsideAfterTranslation(this.direction)) {
+            return true
         }
+    }
+
+    genereteNewPoints() {
+        if (this.chart.series[0].data.length === 0) {
+            this.chart.series[0].setData(generateRandomData(5));
+        }
+    }
+
+    onGameOver() {
+        this.chart.update({
+            title: {
+                useHTML: true,
+                text: `GAME OVER <br> Final score: ${this.score}`
+            }
+        })
+        this.playAgainButton = this.chart.renderer.button(
+            'Play again!',
+            this.chart.plotWidth / 2,
+            this.chart.plotHeight / 2
+        )
+            .add()
+            .on('click', () => {
+                this.resetGame();
+                this.startGame();
+            })
+    }
+
+    onWallCollision() {
+        const isCollision = this.detectWallCollision();
+        if (isCollision) {
+            this.stopInterval();
+            this.onGameOver();
+        }
+    }
+
+    onPointCollision() {
+        const isCollision = this.detectPointCollision();
+        if (isCollision) {
+            this.eat();
+            this.addBodySegment();
+            this.setScore(1);
+            this.genereteNewPoints();
+        }
+    }
+
+    eat() {
+        const closestPoint = this.getClosestPoint();
+        closestPoint.remove();
+    }
+
+    setScore(value) {
+        if (value === 0) {
+            this.score = 0;
+        } else {
+            this.score += value;
+        }
+
+        this.chart.update({ title: { text: `Score: ${this.score}` } })
     }
 
     addBodySegment() {
         const bodySegment = this.chart.renderer.rect(this.initialX, this.initialY, this.size, this.size)
-            .attr({ fill: 'lightblue','stroke-width': 1, stroke: 'white'})
+            .attr({ fill: 'lightblue', 'stroke-width': 1, stroke: 'white' })
             .add(this.svgGroup)
-            .translate(this.translateX,this.translateY);
-    
+            .translate(this.translateX, this.translateY);
+
         this.segments.unshift(bodySegment);
     }
 };
+
+function generateRandomData(amount) {
+    const randomData = [];
+    for (let i = 0; i < amount; i++) {
+        randomData.push(Math.floor(Math.random() * 10))
+    }
+    return randomData;
+}
 
 Highcharts.chart('container', {
     chart: {
         type: 'scatter',
         events: {
             load() {
-                const chart = this,
-                    x = chart.plotLeft,
-                    y = chart.plotTop;
-                const snake = new Snake(chart);
+                snake = new Snake(this);
                 snake.startGame();
-                document.addEventListener('keydown', event => {
-                    switch (event.key) {
-                        case 'ArrowRight':
-                            snake.setDirection('RIGHT');
-                            break;
-                        case 'ArrowLeft':
-                            snake.setDirection('LEFT');
-                            break;
-                        case 'ArrowUp':
-                            snake.setDirection('UP');
-                            break;
-                        case 'ArrowDown':
-                            snake.setDirection('DOWN');
-                            break;
-                        case ' ':
-                            // for debugging purpose only.
-                            snake.autoPilotStop();
-                            break;
-                    }
-                })
-
-            }
-
+            },
         }
     },
+    title: {
+        text: 'Score: 0'
+    },
+    tooltip: {
+        enabled: false
+    },
     series: [{
-        data: [4, 3, 5, 6, 2, 3]
+        data: generateRandomData(5)
     }]
 
 });
