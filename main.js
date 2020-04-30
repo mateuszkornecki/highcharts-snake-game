@@ -162,7 +162,7 @@ class Snake {
   }
 
   getClosestPoint() {
-    const points = this.chart.series[0];
+    const { points } = this.chart.series[0];
     const actualPosition = this.getActualHeadPosition();
     let closestPoint = null;
     points.reduce((previousDistance, point) => {
