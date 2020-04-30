@@ -19,9 +19,11 @@ function getRandomData(amount) {
 }
 
 function getRandomColor() {
-  return `rgb(${getRandomNumber(255)}, ${getRandomNumber(
-    255,
-  )}, ${getRandomNumber(255)})`;
+  return `rgb(
+      ${getRandomNumber(255)},
+      ${getRandomNumber(255)},
+      ${getRandomNumber(255)})
+  `;
 }
 class Snake {
   constructor(chart) {
@@ -72,7 +74,7 @@ class Snake {
   startGame() {
     this.addKeyDownListener();
     this.renderHead();
-    this.startInterval('DOWN');
+    this.startInterval();
   }
 
   resetGame() {
@@ -123,9 +125,7 @@ class Snake {
       this.translateY += this.size;
       this.translateSegments();
     } else if (
-      direction === 'RIGHT'
-      && this.isInsideAfterTranslation('RIGHT')
-    ) {
+      direction === 'RIGHT' && this.isInsideAfterTranslation('RIGHT')) {
       this.translateX += this.size;
       this.translateSegments();
     } else if (direction === 'LEFT' && this.isInsideAfterTranslation('LEFT')) {
@@ -162,7 +162,7 @@ class Snake {
   }
 
   getClosestPoint() {
-    const { points } = this.chart.series[0];
+    const points = this.chart.series[0];
     const actualPosition = this.getActualHeadPosition();
     let closestPoint = null;
     points.reduce((previousDistance, point) => {
