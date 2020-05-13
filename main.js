@@ -91,6 +91,7 @@ class Snake {
     this.interval = setInterval(() => {
       this.onWallCollision();
       this.onPointCollision();
+      this.onBodyCollision();
       this.move(this.direction);
     }, this.refreshRate);
   }
@@ -113,6 +114,9 @@ class Snake {
           y: this.segments[index + 1].translateY,
         };
         segment.translate(previousTranslate.x, previousTranslate.y);
+        if (segment.isNewAdded) {
+          segment.isNewAdded = false;
+        }
       }
     });
   }
@@ -178,7 +182,7 @@ class Snake {
         closestPoint = point;
       }
       return this.getDistanceBetween(actualPosition, pointPosition);
-    }, 1000000);
+    }, Infinity);
 
     return closestPoint;
   }
@@ -200,6 +204,28 @@ class Snake {
 
   detectWallCollision() {
     return !this.isInsideAfterTranslation(this.direction);
+  }
+
+  detectBodyCollision() {
+    const actualHeadPosition = this.getActualHeadPosition();
+    let isBodyCollision = false;
+    this.segments.forEach((segment, index) => {
+      if (index < this.segments.length - 1) {
+        const segmentPosition = {
+          x: this.initialX + segment.translateX,
+          y: this.initialY + segment.translateY,
+        };
+
+        const isCollision = actualHeadPosition.x - segmentPosition.x === 0
+        && actualHeadPosition.y - segmentPosition.y === 0
+        && !segment.isNewAdded;
+        if (isCollision) {
+          isBodyCollision = true;
+        }
+      }
+    });
+
+    return isBodyCollision;
   }
 
   genereteNewPoints() {
@@ -245,6 +271,12 @@ class Snake {
     }
   }
 
+  onBodyCollision() {
+    if (this.detectBodyCollision()) {
+      this.gameOver();
+    }
+  }
+
   eat() {
     const closestPoint = this.getClosestPoint();
     closestPoint.remove();
@@ -268,13 +300,14 @@ class Snake {
     const bodySegment = this.chart.renderer
       .rect(this.initialX, this.initialY, this.size, this.size)
       .attr({
-        fill: 'lightblue',
+        fill: getRandomColor(),
         'stroke-width': 1,
         stroke: 'white',
       })
       .add(this.svgGroup)
       .translate(this.translateX, this.translateY);
 
+    bodySegment.isNewAdded = true;
     this.segments.unshift(bodySegment);
   }
 }
