@@ -45,16 +45,24 @@ class Snake {
     document.addEventListener('keydown', (event) => {
       switch (event.key) {
         case 'ArrowRight':
-          this.setDirection('RIGHT');
+          if (this.direction !== 'LEFT') {
+            this.setDirection('RIGHT');
+          }
           break;
         case 'ArrowLeft':
-          this.setDirection('LEFT');
+          if (this.direction !== 'RIGHT') {
+            this.setDirection('LEFT');
+          }
           break;
         case 'ArrowUp':
-          this.setDirection('UP');
+          if (this.direction !== 'DOWN') {
+            this.setDirection('UP');
+          }
           break;
         case 'ArrowDown':
-          this.setDirection('DOWN');
+          if (this.direction !== 'UP') {
+            this.setDirection('DOWN');
+          }
           break;
       }
     });
