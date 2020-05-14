@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-unresolved */
@@ -73,7 +74,7 @@ class Snake {
 
     this.chart.snakeHead = this.chart.renderer
       .rect(this.initialX, this.initialY, this.size, this.size)
-      .attr({ fill: 'tomato', 'stroke-width': 1, stroke: 'white' })
+      .attr({ fill: 'rgb(78,196,164)', 'stroke-width': 1, stroke: 'white' })
       .add(this.svgGroup);
 
     this.segments.push(this.chart.snakeHead);
@@ -277,7 +278,6 @@ class Snake {
       if (this.chart.series[0].data.length === 0) {
         this.generateNewPoints();
       }
-      
     }
   }
 
@@ -306,11 +306,15 @@ class Snake {
     });
   }
 
+  getSegmentTransparency() {
+    return this.segments.length > 25 ? 0 : 1 - this.segments.length / 25;
+  }
+
   addBodySegment() {
     const bodySegment = this.chart.renderer
       .rect(this.initialX, this.initialY, this.size, this.size)
       .attr({
-        fill: getRandomColor(),
+        fill: `rgba(78,196,164,${this.getSegmentTransparency()}`,
         'stroke-width': 1,
         stroke: 'white',
       })
@@ -337,6 +341,8 @@ Highcharts.chart('container', {
   },
   yAxis: {
     gridLineWidth: 0,
+    lineWidth: 1,
+    tickWidth: 1,
   },
   tooltip: {
     enabled: false,
