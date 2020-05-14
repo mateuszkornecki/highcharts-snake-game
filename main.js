@@ -92,6 +92,7 @@ class Snake {
     this.translateY = 0;
     this.direction = 'DOWN';
     this.segments.splice(0, this.segments.length);
+    this.generateNewPoints();
     this.playAgainButton.destroy();
   }
 
@@ -236,11 +237,9 @@ class Snake {
     return isBodyCollision;
   }
 
-  genereteNewPoints() {
-    if (this.chart.series[0].data.length === 0) {
-      this.chart.series[0].setData(getRandomData(5), false);
-      this.chart.series[0].update({ color: getRandomColor() });
-    }
+  generateNewPoints() {
+    this.chart.series[0].setData(getRandomData(5), false);
+    this.chart.series[0].update({ color: getRandomColor() });
   }
 
   gameOver() {
@@ -275,7 +274,10 @@ class Snake {
       this.eat();
       this.addBodySegment();
       this.setScore(1);
-      this.genereteNewPoints();
+      if (this.chart.series[0].data.length === 0) {
+        this.generateNewPoints();
+      }
+      
     }
   }
 
