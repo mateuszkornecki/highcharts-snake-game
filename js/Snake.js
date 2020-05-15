@@ -45,6 +45,9 @@ class Snake {
             this.setDirection('DOWN');
           }
           break;
+        case ' ':
+          this.stopInterval();
+          break;
       }
     });
   }
@@ -155,41 +158,27 @@ class Snake {
     );
   }
 
-  getClosestPoint() {
+  getCollidedPoint() {
     const { points } = this.chart.series[0];
-    const actualPosition = this.getActualHeadPosition();
-    let closestPoint = null;
-    points.reduce((previousDistance, point) => {
+    const actualHeadPosition = this.getActualHeadPosition();
+    let collidedPoint = null;
+    points.forEach((point) => {
       const pointPosition = {
         x: point.plotX + this.chart.plotLeft,
         y: point.plotY + this.chart.plotTop,
       };
+
       const distanceBetween = this.getDistanceBetween(
-        actualPosition,
+        actualHeadPosition,
         pointPosition,
       );
-      if (distanceBetween < previousDistance) {
-        closestPoint = point;
+
+      if (distanceBetween < this.size) {
+        collidedPoint = point;
       }
-      return this.getDistanceBetween(actualPosition, pointPosition);
-    }, Infinity);
+    });
 
-    return closestPoint;
-  }
-
-  detectPointCollision() {
-    const closestPoint = this.getClosestPoint();
-    const closestPointPos = {
-      x: closestPoint.plotX + this.chart.plotLeft,
-      y: closestPoint.plotY + this.chart.plotTop,
-    };
-    const actualPosition = this.getActualHeadPosition();
-    const distanceBetween = this.getDistanceBetween(
-      closestPointPos,
-      actualPosition,
-    );
-
-    return distanceBetween < this.size;
+    return collidedPoint;
   }
 
   detectWallCollision() {
@@ -251,8 +240,9 @@ class Snake {
   }
 
   onPointCollision() {
-    if (this.detectPointCollision()) {
-      this.eat();
+    const collidedPoint = this.getCollidedPoint();
+    if (collidedPoint) {
+      this.eat(collidedPoint);
       this.addBodySegment();
       this.setScore(1);
       if (this.chart.series[0].data.length === 0) {
@@ -267,9 +257,8 @@ class Snake {
     }
   }
 
-  eat() {
-    const closestPoint = this.getClosestPoint();
-    closestPoint.remove();
+  eat(point) {
+    point.remove();
   }
 
   setScore(value) {

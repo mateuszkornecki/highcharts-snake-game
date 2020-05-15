@@ -18,7 +18,13 @@ Highcharts.chart('game-container', {
   title: {
     text: 'Score: 0',
   },
+  xAxis: {
+    min: 0,
+    max: 11,
+  },
   yAxis: {
+    min: 0,
+    max: 11,
     gridLineWidth: 0,
     lineWidth: 1,
     tickWidth: 1,

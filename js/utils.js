@@ -1,11 +1,11 @@
 function getRandomNumber(max) {
-  return Math.round(Math.random() * max);
+  return Math.round(1 + (Math.random() * (max - 1)));
 }
 
 function getRandomData(amount) {
   const randomData = [];
   for (let i = 0; i < amount; i += 1) {
-    randomData.push(getRandomNumber(10));
+    randomData.push([i, getRandomNumber(10)]);
   }
   return randomData;
 }
