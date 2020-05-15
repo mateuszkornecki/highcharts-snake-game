@@ -1,9 +1,5 @@
-/* eslint-disable no-param-reassign */
-/* eslint-disable class-methods-use-this */
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-unresolved */
-/* eslint-disable consistent-return */
-/* eslint-disable default-case */
 
 import Highcharts from 'https://code.highcharts.com/es-modules/masters/highcharts.src.js';
 import Snake from './Snake.js';

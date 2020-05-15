@@ -1,3 +1,4 @@
+/* eslint-disable import/extensions */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable consistent-return */
 /* eslint-disable no-param-reassign */
