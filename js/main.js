@@ -36,6 +36,11 @@ Highcharts.chart('game-container', {
     {
       name: "Eat'em all!",
       data: getRandomData(5),
+      events: {
+        legendItemClick() {
+          return false;
+        },
+      },
     },
   ],
 });
