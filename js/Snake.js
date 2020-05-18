@@ -45,9 +45,6 @@ class Snake {
             this.setDirection('DOWN');
           }
           break;
-        case ' ':
-          this.stopInterval();
-          break;
       }
     });
   }
