@@ -5,7 +5,7 @@ function getRandomNumber(max) {
 function getRandomData(amount) {
   const randomData = [];
   for (let i = 0; i < amount; i += 1) {
-    randomData.push([i, getRandomNumber(10)]);
+    randomData.push([getRandomNumber(10), getRandomNumber(10)]);
   }
   return randomData;
 }
