@@ -1,4 +1,4 @@
-# Snake Game Article
+# Creating a snake game with the Highcharts.js library
 
 ## Intro
 Highcharts is known as a highly customizable library that is allowing users to create almost anything they can imagine. How far can we push its limits? Is it possible to create a playable game that will interact with our charts using the Highcharts.js library? Let’s find out.
@@ -17,7 +17,7 @@ Before we could start rendering we need to create a layer where we could place r
 Because I wanted to create a game that could be interactive with the chart, I'm starting from a basic scatter chart. 
 
 ``` javascript
-// https://jsfiddle.net/BlackLabel/nz845cqe/)
+// https://jsfiddle.net/BlackLabel/nz845cqe/
 const chart = Highcharts.chart('container', {
 	chart: {
 		type: 'scatter'
@@ -28,7 +28,7 @@ const chart = Highcharts.chart('container', {
 });
 ```
 
- Now we the renderer can be accessed straight from the chart that we just created. To use it and create the first rectangle we can use [renderer.rect(x, y, width, height)](https://api.highcharts.com/class-reference/Highcharts.SVGRenderer#rect)method. The method takes four arguments: 
+ Now we the renderer can be accessed straight from the chart that we just created. To use it and create the first rectangle we can use [renderer.rect(x, y, width, height)](https://api.highcharts.com/class-reference/Highcharts.SVGRenderer#rect) method. The method takes four arguments: 
 	1/ x - distance (in px) from the left side of the container
 	2/ y - distance from the top of the container
 	3/ width of the rectangle
