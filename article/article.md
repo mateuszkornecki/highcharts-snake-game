@@ -34,7 +34,7 @@ const chart = Highcharts.chart('container', {
 3. width of the rectangle
 4. height of the rectangle
 
-[image:AE6DF7E1-AA50-485B-9336-9B03F93539D8-3311-00001354683DD6A3/=Canvas_default_grid.png]
+![svg renderer guide](./assets/svgRendererGuide.svg)
 
 Using the renderer method returns an SVG element with the given coordinates and sizes, but before we will add it to our char we need to apply some attributes like `fill`, `stroke`, or `stroke-width` to make our rectangle visible. To do that we could use the [attr()](https://api.highcharts.com/class-reference/Highcharts.SVGElement#attr) method. After specifying those attributes we could finally add the SVG element to our chart using the [add()](https://api.highcharts.com/class-reference/Highcharts.SVGElement#add) method. 
 
