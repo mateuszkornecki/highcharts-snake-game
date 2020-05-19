@@ -8,6 +8,7 @@ import { getRandomData } from './utils.js';
 Highcharts.chart('game-container', {
   chart: {
     type: 'scatter',
+    plotBorderWidth: 1,
     events: {
       load() {
         const snake = new Snake(this);
@@ -21,13 +22,12 @@ Highcharts.chart('game-container', {
   xAxis: {
     min: 0,
     max: 11,
+    tickWidth: 0,
   },
   yAxis: {
     min: 0,
     max: 11,
     gridLineWidth: 0,
-    lineWidth: 1,
-    tickWidth: 1,
   },
   tooltip: {
     enabled: false,
