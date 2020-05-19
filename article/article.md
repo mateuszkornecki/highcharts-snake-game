@@ -124,7 +124,7 @@ const pointPosX = xAxis.toPixels(point.x)
 Now, all we have to do is create a simple function that will iterate over all points and remove a point whose distance is smaller than a snake size. To remove a point we could use the [remove()](https://api.highcharts.com/class-reference/Highcharts.Point#remove) method. Then we could call that function inside the interval that is responsible for moving the snake. Our snake finally learned how to eat chart points.
 
 ```javascript
-// https://jsfiddle.net/BlackLabel/Lk4wfs1y/
+// https://jsfiddle.net/BlackLabel/7krsjetq/
 function onCollision() {
 	const xAxis = chart.xAxis[0],
     points = chart.series[0].points,
