@@ -34,7 +34,7 @@ const chart = Highcharts.chart('container', {
 3. width of the rectangle
 4. height of the rectangle
 
-![svg renderer guide](./assets/svgRendererGuide.png)
+![svg renderer guide](./assets/svgRendererGuide.)
 
 Using the renderer method returns an SVG element with the given coordinates and sizes, but before we will add it to our char we need to apply some attributes like `fill`, `stroke`, or `stroke-width` to make our rectangle visible. To do that we could use the [attr()](https://api.highcharts.com/class-reference/Highcharts.SVGElement#attr) method. After specifying those attributes we could finally add the SVG element to our chart using the [add()](https://api.highcharts.com/class-reference/Highcharts.SVGElement#add) method. 
 
@@ -62,7 +62,6 @@ Now we could use that knowledge to tell our snake to continuously move to the ri
 
 ```javascript
 // https://jsfiddle.net/BlackLabel/npvL5rf3/
-
 const snake = chart.renderer.rect(
 	chart.plotLeft, 
 	chart.plotTop, 
@@ -88,16 +87,21 @@ setInterval(() => {
 So far we have learned how to create a snake, give him the ability to move but he still lacks a very important skill - eating points. To do that we need to somehow remove a point when it has the same position as our snake. To make it easier I will set the same value for all points and the [min](https://api.highcharts.com/highcharts/xAxis.min) and [max](https://api.highcharts.com/highcharts/xAxis.max) properties values for both axes.
 
 ```javascript
-// https://jsfiddle.net/BlackLabel/feopcdy5/
+// https://jsfiddle.net/BlackLabel/tmoxv7e1/
 const chart = Highcharts.chart('container', {
   chart: {
     type: 'scatter'
   },
-	yAxis: {
-	min: 0,
-	max: 8
-	},
+  xAxis: {
+    min: 0,
+    max: 8
+  },
+  yAxis: {
+    min: 0,
+    max: 8
+  },
   series: [{
+    pointStart: 1,
     data: [8, 8, 8, 8, 8, 8, 8, 8]
   }]
 });
@@ -122,9 +126,9 @@ Now, all we have to do is create a simple function that will iterate over all po
 ```javascript
 // https://jsfiddle.net/BlackLabel/Lk4wfs1y/
 function onCollision() {
-	const xAxis = chart.xAxis[0];
-  const points = chart.series[0].points;
-  const snakePosX = snake.attr('x') + snake.translateX;
+	const xAxis = chart.xAxis[0],
+    points = chart.series[0].points,
+    snakePosX = snake.attr('x') + snake.translateX;
 
   points.forEach(point => {
     const pointPosX = xAxis.toPixels(point.x)
