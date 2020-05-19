@@ -29,10 +29,10 @@ const chart = Highcharts.chart('container', {
 ```
 
  Now we the renderer can be accessed straight from the chart that we just created. To use it and create the first rectangle we can use [renderer.rect(x, y, width, height)](https://api.highcharts.com/class-reference/Highcharts.SVGRenderer#rect) method. The method takes four arguments: 
-	1. x - distance (in px) from the left side of the container
-	2. y - distance from the top of the container
-	3. width of the rectangle
-	4. height of the rectangle
+	* x - distance (in px) from the left side of the container
+	* y - distance from the top of the container
+	* width of the rectangle
+	* height of the rectangle
 
 [image:AE6DF7E1-AA50-485B-9336-9B03F93539D8-3311-00001354683DD6A3/=Canvas_default_grid.png]
 
