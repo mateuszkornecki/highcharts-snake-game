@@ -140,4 +140,8 @@ function onCollision() {
 }
 ```
 
-Our snake has learned some basic abilities. Of course to create a fully functional game we still have a lot to improve but the most important parts related to the snake’s integration with the Highcharts library are described in this article.  The code for the final version of the game can be found here: https://github.com/mateuszkornecki/highcharts-snake-game/tree/master/js
+Our snake has learned some basic abilities. Of course to create a fully functional game we still have a lot to improve but the most important parts related to the snake’s integration with the Highcharts library are described in this article. 
+
+**The final version of the game:** https://mateuszkornecki.github.io/highcharts-snake-game/
+
+The code for the final version of the game can be found here: https://github.com/mateuszkornecki/highcharts-snake-game/tree/master/js
