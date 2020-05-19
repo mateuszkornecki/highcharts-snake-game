@@ -109,7 +109,7 @@ const chart = Highcharts.chart('container', {
 
 Now we are ready to implement this feature. All we have to do is to compare the pixel position of the snake with the points. 
 
-To get the actual snake position we need to add a translate value to its initial position. Translate value can be found under snake.translateX property, to get the initial position we could use the [attr()](https://api.highcharts.com/class-reference/Highcharts.SVGElement#attr) method that will return a value of the certain attribute. 
+To get the actual snake position we need to add a translate value to its initial position. Translate value can be found under `snake.translateX` property, to get the initial position we could use the [attr()](https://api.highcharts.com/class-reference/Highcharts.SVGElement#attr) method that will return a value of the certain attribute. 
 
 ```javascript
 const snakePosX = snake.attr('x') + snake.translateX;
@@ -144,4 +144,4 @@ Our snake has learned some basic abilities. Of course to create a fully function
 
 **The final version of the game:** https://mateuszkornecki.github.io/highcharts-snake-game/
 
-The code for the final version of the game can be found here: https://github.com/mateuszkornecki/highcharts-snake-game/tree/master/js
+The code for the final version of the game can be found here: https://github.com/mateuszkornecki/highcharts-snake-game/tree/master/j
