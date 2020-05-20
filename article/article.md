@@ -28,7 +28,7 @@ const chart = Highcharts.chart('container', {
 });
 ```
 
- Now we the renderer can be accessed straight from the chart that we just created. To use it and create the first rectangle we can use [renderer.rect(x, y, width, height)](https://api.highcharts.com/class-reference/Highcharts.SVGRenderer#rect) method. The method takes four arguments: 
+ Now the renderer can be accessed straight from the chart that we just created. To use it and create the first rectangle we can use [renderer.rect(x, y, width, height)](https://api.highcharts.com/class-reference/Highcharts.SVGRenderer#rect) method. The method takes four arguments: 
 1. x - distance (in px) from the left side of the container
 2. y - distance from the top of the container
 3. width of the rectangle
@@ -58,7 +58,7 @@ In the previous paragraph, we learned how to render a simple rectangle, but it i
 snake.translate(100,0);
 ```
 
-Now we could use that knowledge to tell our snake to continuously move to the right size until he won’t leave our chart (we don’t want him to run away, right?). To achieve that we could create a simple interval which each time will move the snake by an increased value. To limit our snake we could use one take from the chart properties the size of the plot. It can be found under `chart.plotWidth` property. Additionally, we could use another chart properties - `chart.plotLeft` and `chart.plotTop` to update the snake’s initial position (right now it is rendered outside of a plot area, we want him to be inside it).
+Now we could use that knowledge to tell our snake to continuously move to the right size until he won’t leave our chart (we don’t want him to run away, right?). To achieve that we could create a simple interval which each time will move the snake by an increased value. Then we need to find a chart property that will allow us to define the boundaries that will keep the snake inside the chart. It this case we could use the `chart.plotWidth` property. Additionally, we could use another chart properties - `chart.plotLeft` and `chart.plotTop` to update the snake’s initial position (right now it is rendered outside of a plot area, we want him to be inside it).
 
 ```javascript
 // https://jsfiddle.net/BlackLabel/npvL5rf3/
