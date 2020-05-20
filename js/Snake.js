@@ -133,7 +133,7 @@ class Snake {
       case 'UP':
         return this.translateY - this.size >= 0;
       case 'DOWN':
-        return this.translateY + 2 * this.size <= this.chart.plotHeight;
+        return this.translateY + this.size <= this.chart.plotHeight;
       case 'RIGHT':
         return this.translateX + 2 * this.size <= this.chart.plotWidth;
       case 'LEFT':
