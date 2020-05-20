@@ -19,12 +19,12 @@ Because I wanted to create a game that could be interactive with the chart, I'm 
 ``` javascript
 // https://jsfiddle.net/BlackLabel/nz845cqe/
 const chart = Highcharts.chart('container', {
-	chart: {
-		type: 'scatter'
-	},
-  series: [{
-    data: [4, 3, 5, 6, 2, 3]
-  }]
+  chart: {
+    type: 'scatter'
+  },
+    series: [{
+      data: [4, 3, 5, 6, 2, 3]
+    }]
 });
 ```
 
@@ -43,10 +43,10 @@ Our snake will be a red rectangle, 20x20px size - the code that will add it to o
 ```javascript
 // https://jsfiddle.net/BlackLabel/0nycxdsz/
 const snake = chart.renderer.rect(0, 0, 20, 20)
-	.attr({
-		fill: 'red'
-	})
-	.add();
+  .attr({
+    fill: 'red'
+  })
+  .add();
 ```
 
 After adding this snippet to our chart we should end up with a scatter chart with a red rectangle renderer in the top-left corner.
@@ -63,10 +63,10 @@ Now we could use that knowledge to tell our snake to continuously move to the ri
 ```javascript
 // https://jsfiddle.net/BlackLabel/npvL5rf3/
 const snake = chart.renderer.rect(
-	chart.plotLeft, 
-	chart.plotTop, 
-	20, 
-	20
+   chart.plotLeft, 
+   chart.plotTop, 
+   20, 
+   20
 )
   .attr({
     fill: 'red'
@@ -77,8 +77,8 @@ let x = 0;
 
 setInterval(() => {
   if (x + 20 < chart.plotWidth) {
-		x += 20;
-		snake.translate(x, 0);
+    x += 20;
+    snake.translate(x, 0);
   }
 }, 250);
 ```
@@ -126,12 +126,12 @@ Now, all we have to do is create a simple function that will iterate over all po
 ```javascript
 // https://jsfiddle.net/BlackLabel/7krsjetq/
 function onCollision() {
-	const xAxis = chart.xAxis[0],
+  const xAxis = chart.xAxis[0],
     points = chart.series[0].points,
     snakePosX = snake.attr('x') + snake.translateX;
 
   points.forEach(point => {
-    const pointPosX = xAxis.toPixels(point.x)
+    const pointPosX = xAxis.toPixels(point.x);
 		
     if (Math.abs(snakePosX - pointPosX) < 20) {
       point.remove();
