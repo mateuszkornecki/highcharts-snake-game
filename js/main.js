@@ -23,11 +23,16 @@ Highcharts.chart('game-container', {
     min: 0,
     max: 11,
     tickWidth: 0,
+    visible: false,
   },
   yAxis: {
     min: 0,
     max: 11,
     gridLineWidth: 0,
+    visible: false,
+  },
+  legend: {
+    enabled: false,
   },
   tooltip: {
     enabled: false,
@@ -36,11 +41,6 @@ Highcharts.chart('game-container', {
     {
       name: "Eat'em all!",
       data: getRandomData(5),
-      events: {
-        legendItemClick() {
-          return false;
-        },
-      },
     },
   ],
 });
