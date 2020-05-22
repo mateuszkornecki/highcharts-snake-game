@@ -6,13 +6,13 @@ Highcharts is known as a highly customizable library that is allowing users to c
 In this article, you will find some tips on how to transform your charts into a simple snake game. 
 
 ## SVG Renderer
-The very important tool that might help with implementing custom elements that are not included in the Highcharts core is the Highcharts SVG renderer. It can be used to add to your chart a custom SVG element that can be created in any shape - the only thing that limits you is your imagination. If you’ve used canvas API before you will feel _at home_.
+A very important tool that might help with implementing custom elements that are not included in the Highcharts core is the Highcharts SVG renderer. It can be used to add to your chart a custom SVG element that can be created in any shape - the only thing that limits you is your imagination. If you have used canvas API before you will feel _at home_.
 
 ### SVG Elements
 There are a few basic elements that can be rendered, you could create a [circle](https://api.highcharts.com/class-reference/Highcharts.SVGRenderer#circle), [arc](https://api.highcharts.com/class-reference/Highcharts.SVGRenderer#arc), [rectangle](https://api.highcharts.com/class-reference/Highcharts.SVGRenderer#rect), [text element](https://api.highcharts.com/class-reference/Highcharts.SVGRenderer#text), [label](https://api.highcharts.com/class-reference/Highcharts.SVGRenderer#label), [button](https://api.highcharts.com/class-reference/Highcharts.SVGRenderer#button), [symbol](https://api.highcharts.com/class-reference/Highcharts.SVGRenderer#symbol) or draw a [path](https://api.highcharts.com/class-reference/Highcharts.SVGRenderer#path). This time we will focus on rendering a rectangle that will be used to create a snake body. 
 
 ## Creating a snake
-Before we could start rendering we need to create a layer where we could place rendered elements. For this purpose, you could use a chart that is already created but it is worth mentioning that it is possible to create an  [independent SVG drawing](https://jsfiddle.net/gh/get/library/pure/highcharts/highcharts/tree/master/samples/highcharts/members/renderer-on-chart). 
+Before we can start rendering we need to create a layer where we may place rendered elements. For this purpose, you could use the chart that already exist but it is worth mentioning that it is possible to create an  [independent SVG drawing](https://jsfiddle.net/gh/get/library/pure/highcharts/highcharts/tree/master/samples/highcharts/members/renderer-on-chart). 
 
 Because I wanted to create a game that could be interactive with the chart, I'm starting from a basic scatter chart. 
 
@@ -36,7 +36,7 @@ const chart = Highcharts.chart('container', {
 
 ![svg renderer guide](./assets/svgRendererGuide.png)
 
-Using the renderer method returns an SVG element with the given coordinates and sizes, but before we will add it to our char we need to apply some attributes like `fill`, `stroke`, or `stroke-width` to make our rectangle visible. To do that we could use the [attr()](https://api.highcharts.com/class-reference/Highcharts.SVGElement#attr) method. After specifying those attributes we could finally add the SVG element to our chart using the [add()](https://api.highcharts.com/class-reference/Highcharts.SVGElement#add) method. 
+Using the renderer method returns an SVG element with the given coordinates and sizes, but before adding it to our chart we need to apply some attributes like `fill`, `stroke`, or `stroke-width` to make our rectangle visible. To do that we could use the [attr()](https://api.highcharts.com/class-reference/Highcharts.SVGElement#attr) method. After specifying those attributes we could finally add the SVG element to our chart using the [add()](https://api.highcharts.com/class-reference/Highcharts.SVGElement#add) method. 
 
 Our snake will be a red rectangle, 20x20px size - the code that will add it to our chart should look like this:
 
@@ -52,13 +52,13 @@ const snake = chart.renderer.rect(0, 0, 20, 20)
 After adding this snippet to our chart we should end up with a scatter chart with a red rectangle renderer in the top-left corner.
 
 ## Let it move!
-In the previous paragraph, we learned how to render a simple rectangle, but it is just a static. Our snake should be more lively. To wake him up, we need to learn about translate() method. It will allow us to the element by a certain x and y values. So if we want to move snake by 100px to the right should use
+In the previous paragraph, we learned how to render a simple rectangle, but it is only static. Our snake should be more lively. To wake it up, we need to learn about translate() method. It will allow us to move the element by a certain x and y values. So if we want to move snake by 100px to the right side should use
 ```javascript 
 // https://jsfiddle.net/BlackLabel/yqsma7e8/
 snake.translate(100,0);
 ```
 
-Now we could use that knowledge to tell our snake to continuously move to the right size until he won’t leave our chart (we don’t want him to run away, right?). To achieve that we could create a simple interval which each time will move the snake by an increased value. Then we need to find a chart property that will allow us to define the boundaries that will keep the snake inside the chart. It this case we could use the `chart.plotWidth` property. Additionally, we could use another chart properties - `chart.plotLeft` and `chart.plotTop` to update the snake’s initial position (right now it is rendered outside of a plot area, we want him to be inside it).
+Now we are able to use that knowledge to tell our snake to continuously move to the right size until it cannot move further (we don’t want him to run away, right?). To achieve that we could create a simple interval which each time will move the snake by an increased value. Then we need to find a chart property that will allow us to define the boundaries that will keep the snake inside the chart. In this case we are able to use the `chart.plotWidth` property. Additionally, we may use another chart properties - `chart.plotLeft` and `chart.plotTop` to update the snake’s initial position (right now it is rendered outside of the plot area, we want him to be inside it).
 
 ```javascript
 // https://jsfiddle.net/BlackLabel/npvL5rf3/
@@ -109,7 +109,7 @@ const chart = Highcharts.chart('container', {
 
 Now we are ready to implement this feature. All we have to do is to compare the pixel position of the snake with the points. 
 
-To get the actual snake position we need to add a translate value to its initial position. Translate value can be found under `snake.translateX` property, to get the initial position we could use the [attr()](https://api.highcharts.com/class-reference/Highcharts.SVGElement#attr) method that will return a value of the certain attribute. 
+To get the actual snake position we need to add a translate value to its initial position. Translate value can be found under `snake.translateX` property, to get the initial position we could use the [attr()](https://api.highcharts.com/class-reference/Highcharts.SVGElement#attr) method that will return a value of a certain attribute. 
 
 ```javascript
 const snakePosX = snake.attr('x') + snake.translateX;
@@ -121,7 +121,7 @@ There are several ways to find a pixel coordinates of a point, but the easiest o
 const pointPosX = xAxis.toPixels(point.x)
 ```
 
-Now, all we have to do is create a simple function that will iterate over all points and remove a point whose distance is smaller than a snake size. To remove a point we could use the [remove()](https://api.highcharts.com/class-reference/Highcharts.Point#remove) method. Then we could call that function inside the interval that is responsible for moving the snake. Our snake finally learned how to eat chart points.
+Now, all we have to do is create a simple function that will iterate over all points and remove whose distance is smaller than a snake size. To remove a point we can use the [remove()](https://api.highcharts.com/class-reference/Highcharts.Point#remove) method. Then we are able to call that function inside the interval that is responsible for moving the snake. Our snake finally learned how to eat chart points.
 
 ```javascript
 // https://jsfiddle.net/BlackLabel/7krsjetq/
