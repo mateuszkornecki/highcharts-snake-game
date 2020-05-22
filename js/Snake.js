@@ -228,6 +228,12 @@ class Snake {
         this.resetGame();
         this.startGame();
       });
+    const playAgainButtonBBox = this.playAgainButton.getBBox();
+
+    this.playAgainButton.translate(
+      this.chart.plotWidth / 2 - playAgainButtonBBox.width / 2,
+      this.chart.plotHeight / 2,
+    );
   }
 
   onWallCollision() {
