@@ -296,6 +296,11 @@ class Snake {
     bodySegment.isNewAdded = true;
     this.segments.unshift(bodySegment);
   }
+
+
+  isMobile() {
+    return Boolean('ontouchstart' in window);
+  }
 }
 
 export default Snake;
