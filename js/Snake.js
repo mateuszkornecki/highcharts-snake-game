@@ -49,6 +49,33 @@ class Snake {
     });
   }
 
+  addControllers(eventType, condition, cases ) {
+    document.addEventListener(eventType, (event) => {
+      switch (event[condition]) {
+        case cases[0]:
+          if (this.direction !== 'LEFT') {
+            this.setDirection('RIGHT');
+          }
+          break;
+        case cases[1]:
+          if (this.direction !== 'RIGHT') {
+            this.setDirection('LEFT');
+          }
+          break;
+        case cases[2]:
+          if (this.direction !== 'DOWN') {
+            this.setDirection('UP');
+          }
+          break;
+        case cases[3]:
+          if (this.direction !== 'UP') {
+            this.setDirection('DOWN');
+          }
+          break;
+      }
+    });
+  }
+
   renderHead() {
     this.svgGroup = this.chart.renderer.g().add().toFront();
 
@@ -300,6 +327,43 @@ class Snake {
 
   isMobile() {
     return Boolean('ontouchstart' in window);
+  }
+
+  showMobileControllers() {
+    if (this.isMobile()) {
+      const mobileControllers = document.getElementById('mobile-controllers');
+      mobileControllers.classList.add('mobile-controllers--visible');
+
+      this.addMobileControllersListeners();
+    }
+  }
+
+  addMobileControllersListeners() {
+    const mobileControllers = document.getElementById('mobile-controllers');
+    mobileControllers.addEventListener('click', (event) => {
+      switch (event.target.id) {
+        case 'mobile-controllers__right':
+          if (this.direction !== 'LEFT') {
+            this.setDirection('RIGHT');
+          }
+          break;
+        case 'mobile-controllers__left':
+          if (this.direction !== 'RIGHT') {
+            this.setDirection('LEFT');
+          }
+          break;
+        case 'mobile-controllers__up':
+          if (this.direction !== 'DOWN') {
+            this.setDirection('UP');
+          }
+          break;
+        case 'mobile-controllers__down':
+          if (this.direction !== 'UP') {
+            this.setDirection('DOWN');
+          }
+          break;
+      }
+    });
   }
 }
 

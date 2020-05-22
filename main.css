@@ -11,3 +11,37 @@
     max-height: 700px;
     height:100%;
 }
+
+.mobile-controllers {
+    height: 10rem;
+    width: 10rem;
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    grid-template-areas:
+      ". up ."
+      "left empty right"
+      ". down .";
+  }
+
+.mobile-controllers--visible {
+    display: grid;
+}
+
+.mobile-controllers__left {
+    grid-area: left;
+  }
+
+.mobile-controllers__up {
+    grid-area: up;
+}
+
+.mobile-controllers__down {
+    grid-area: down;
+}
+
+.mobile-controllers__right {
+    grid-area: right;
+}
