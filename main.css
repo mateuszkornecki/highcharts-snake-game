@@ -15,7 +15,7 @@
 .mobile-controllers {
     height: 10rem;
     width: 10rem;
-    display: none;
+    display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
     grid-column-gap: 0px;
@@ -26,8 +26,8 @@
       ". down .";
   }
 
-.mobile-controllers--visible {
-    display: grid;
+.mobile-controllers--hidden {
+    display: none;
 }
 
 .mobile-controllers__left {

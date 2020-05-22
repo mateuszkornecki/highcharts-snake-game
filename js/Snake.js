@@ -88,6 +88,7 @@ class Snake {
   }
 
   startGame() {
+    this.showMobileControllers();
     this.addKeyDownListener();
     this.renderHead();
     this.startInterval();
@@ -332,7 +333,7 @@ class Snake {
   showMobileControllers() {
     if (this.isMobile()) {
       const mobileControllers = document.getElementById('mobile-controllers');
-      mobileControllers.classList.add('mobile-controllers--visible');
+      mobileControllers.classList.remove('mobile-controllers--hidden');
 
       this.addMobileControllersListeners();
     }
