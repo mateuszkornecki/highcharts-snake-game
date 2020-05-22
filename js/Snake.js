@@ -221,7 +221,7 @@ class Snake {
       .button(
         'Play again!',
         this.chart.plotWidth / 2,
-        this.chart.plotHeight / 2,
+        this.chart.plotHeight / 2 + this.chart.plotTop,
       )
       .add()
       .on('click', () => {
@@ -232,7 +232,7 @@ class Snake {
 
     this.playAgainButton.translate(
       this.chart.plotWidth / 2 - playAgainButtonBBox.width / 2,
-      this.chart.plotHeight / 2,
+      this.chart.plotHeight / 2 + this.chart.plotTop - playAgainButtonBBox.height / 2,
     );
   }
 
