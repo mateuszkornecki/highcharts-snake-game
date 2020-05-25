@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 /* eslint-disable import/no-unresolved */
 
-import Highcharts from 'https://code.highcharts.com/es-modules/masters/highcharts.src.js';
+import Highcharts from 'highcharts';
 import Snake from './Snake.js';
 import { getRandomData } from './utils.js';
 
