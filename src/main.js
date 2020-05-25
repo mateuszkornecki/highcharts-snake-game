@@ -44,3 +44,22 @@ Highcharts.chart('game-container', {
     },
   ],
 });
+
+if (!Math.hypot) {
+  // eslint-disable-next-line no-unused-vars
+  Math.hypot = function (x, y) {
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=896264#c28
+    let max = 0;
+    let s = 0;
+    for (let i = 0; i < arguments.length; i += 1) {
+      // eslint-disable-next-line prefer-rest-params
+      const arg = Math.abs(Number(arguments[i]));
+      if (arg > max) {
+        s *= (max / arg) * (max / arg);
+        max = arg;
+      }
+      s += arg === 0 && max === 0 ? 0 : (arg / max) * (arg / max);
+    }
+    return max === 1 / 0 ? 1 / 0 : max * Math.sqrt(s);
+  };
+}
