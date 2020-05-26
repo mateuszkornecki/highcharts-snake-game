@@ -22,54 +22,17 @@ var Snake = /** @class */ (function () {
     Snake.prototype.addKeyDownListener = function () {
         var _this = this;
         document.addEventListener('keydown', function (event) {
-            switch (event.key) {
-                case 'ArrowRight':
-                    if (_this.direction !== 'LEFT') {
-                        _this.setDirection('RIGHT');
-                    }
-                    break;
-                case 'ArrowLeft':
-                    if (_this.direction !== 'RIGHT') {
-                        _this.setDirection('LEFT');
-                    }
-                    break;
-                case 'ArrowUp':
-                    if (_this.direction !== 'DOWN') {
-                        _this.setDirection('UP');
-                    }
-                    break;
-                case 'ArrowDown':
-                    if (_this.direction !== 'UP') {
-                        _this.setDirection('DOWN');
-                    }
-                    break;
+            if ((event.key === 'ArrowRight' || 'Right') && _this.direction !== 'LEFT') {
+                _this.setDirection('RIGHT');
             }
-        });
-    };
-    Snake.prototype.addControllers = function (eventType, condition, cases) {
-        var _this = this;
-        document.addEventListener(eventType, function (event) {
-            switch (event[condition]) {
-                case cases[0]:
-                    if (_this.direction !== 'LEFT') {
-                        _this.setDirection('RIGHT');
-                    }
-                    break;
-                case cases[1]:
-                    if (_this.direction !== 'RIGHT') {
-                        _this.setDirection('LEFT');
-                    }
-                    break;
-                case cases[2]:
-                    if (_this.direction !== 'DOWN') {
-                        _this.setDirection('UP');
-                    }
-                    break;
-                case cases[3]:
-                    if (_this.direction !== 'UP') {
-                        _this.setDirection('DOWN');
-                    }
-                    break;
+            else if ((event.key === 'ArrowLeft' || 'Left') && _this.setDirection('RIGHT')) {
+                _this.setDirection('RIGHT');
+            }
+            else if (('ArrowUp' || 'Up') && (_this.direction !== 'DOWN')) {
+                _this.setDirection('UP');
+            }
+            else if (('ArrowDown' || 'Down') && _this.setDirection('DOWN')) {
+                _this.setDirection('DOWN');
             }
         });
     };
