@@ -23,15 +23,32 @@ class Snake {
   }
 
   addKeyDownListener() {
+    const isIE = Boolean(window.document.documentMode);
+    const eventDirections = isIE
+      ? ['Right', 'Left', 'Up', 'Down']
+      : ['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'];
     document.addEventListener('keydown', (event) => {
-      if ((event.key === 'ArrowRight' || 'Right') && this.direction !== 'LEFT') {
-        this.setDirection('RIGHT');
-      } else if ((event.key === 'ArrowLeft' || 'Left') && this.setDirection('RIGHT')) {
-        this.setDirection('RIGHT');
-      } else if (('ArrowUp' || 'Up') && (this.direction !== 'DOWN')) {
-        this.setDirection('UP');
-      } else if (('ArrowDown' || 'Down') && this.setDirection('DOWN')) {
-        this.setDirection('DOWN');
+      switch (event.key) {
+        case eventDirections[0]:
+          if (this.direction !== 'LEFT') {
+            this.setDirection('RIGHT');
+          }
+          break;
+        case eventDirections[1]:
+          if (this.direction !== 'RIGHT') {
+            this.setDirection('LEFT');
+          }
+          break;
+        case eventDirections[2]:
+          if (this.direction !== 'DOWN') {
+            this.setDirection('UP');
+          }
+          break;
+        case eventDirections[3]:
+          if (this.direction !== 'UP') {
+            this.setDirection('DOWN');
+          }
+          break;
       }
     });
   }

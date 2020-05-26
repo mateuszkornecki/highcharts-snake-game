@@ -21,18 +21,32 @@ var Snake = /** @class */ (function () {
     }
     Snake.prototype.addKeyDownListener = function () {
         var _this = this;
+        var isIE = Boolean(window.document.documentMode);
+        var eventDirections = isIE
+            ? ['Right', 'Left', 'Up', 'Down']
+            : ['ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown'];
         document.addEventListener('keydown', function (event) {
-            if ((event.key === 'ArrowRight' || 'Right') && _this.direction !== 'LEFT') {
-                _this.setDirection('RIGHT');
-            }
-            else if ((event.key === 'ArrowLeft' || 'Left') && _this.setDirection('RIGHT')) {
-                _this.setDirection('RIGHT');
-            }
-            else if (('ArrowUp' || 'Up') && (_this.direction !== 'DOWN')) {
-                _this.setDirection('UP');
-            }
-            else if (('ArrowDown' || 'Down') && _this.setDirection('DOWN')) {
-                _this.setDirection('DOWN');
+            switch (event.key) {
+                case eventDirections[0]:
+                    if (_this.direction !== 'LEFT') {
+                        _this.setDirection('RIGHT');
+                    }
+                    break;
+                case eventDirections[1]:
+                    if (_this.direction !== 'RIGHT') {
+                        _this.setDirection('LEFT');
+                    }
+                    break;
+                case eventDirections[2]:
+                    if (_this.direction !== 'DOWN') {
+                        _this.setDirection('UP');
+                    }
+                    break;
+                case eventDirections[3]:
+                    if (_this.direction !== 'UP') {
+                        _this.setDirection('DOWN');
+                    }
+                    break;
             }
         });
     };
