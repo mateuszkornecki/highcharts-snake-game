@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "highcharts": "^8.1.0",
+    "highcharts": "^8.1.1",
     "typescript": "^3.9.3"
   },
   "devDependencies": {
